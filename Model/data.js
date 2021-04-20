@@ -79,13 +79,10 @@ const jwt=require('jsonwebtoken')
 UserSchema.methods.generateAuthToken=async function(){
     try{
      console.log(this._id)
-     const token=await jwt.sign({_id:this._id.toString()},"Welcome to pandas solution Limited Best web service")
+     const token=await jwt.sign({_id:this._id.toString()},process.env.SECRET_KEY)
      this.tokens=this.tokens.concat({token:token})
      await this.save()
      return token;
-
-
-
 
     }
 

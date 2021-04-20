@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const express=require('express')
 
 // 1.construct router
@@ -125,7 +127,7 @@ passhashing("shamim")
 const jwt=require('jsonwebtoken')
 //at first create token
 const jwtauth=async()=>{
-    const token=await jwt.sign({_id:"607c6c61631eed2f283daaa6"},"Wlcome to pandas solution Limited okay")
+    const token=await jwt.sign({_id:"607c6c61631eed2f283daaa6"},process.env.SECRET-KEY)
 
     console.log(` THe Token is for id  ${token}`)
     //id part is payload
@@ -133,7 +135,7 @@ const jwtauth=async()=>{
 
     //for user varify
 
-    const userverify=await jwt.verify(token,'Wlcome to pandas solution Limited okay')
+    const userverify=await jwt.verify(token,process.env.SECRET-KEY)
      console.log(`After verify is ${userverify}`)
   
      //it indicate user is genuine or not
