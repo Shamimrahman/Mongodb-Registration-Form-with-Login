@@ -1,5 +1,4 @@
 require('dotenv').config()
-
 const express=require('express')
 
 // 1.construct router
@@ -7,6 +6,7 @@ const router=new express.Router()
 //ekhn app.js a use hobe 
 //costract router end
 const User =require('../Model/data')
+
 
 //routing
 
@@ -40,9 +40,21 @@ router.post('/registration',async(req,res)=>{
 
         const token=await userform.generateAuthToken();
         console.log(`The token part is ${token}`)
+           
+        //ekhn token generate korar por amader kaj hoilo token
+        //token k cookies a store kora 
 
-        
-
+        res.cookie('jwt',token,  {
+            express:new Date(Date.now()+300000),
+            httpOnly:true
+        })
+        //here jwt cookie name 
+        //aikhn 3000 mean kore ami ekta website a dhuklam 
+        //thn login howar por autmoaticly 10/20mins porbe abar login koren
+        //like nsu rds 
+        //so token cokkies theke expire kore dei
+       
+       //cookie end
 
         const storeuser=await userform.save()
         res.status(200).render("index")
@@ -75,6 +87,30 @@ router.post('/login',async(req,res)=>{
 
         const token=await usermail.generateAuthToken();
         console.log(`The login token part is ${token}`)
+        res.cookie('jwt',token,  {
+            express:new Date(Date.now()+3000),
+            httpOnly:true
+        })
+        //here jwt cookie name 
+        //aikhn 3000 mean kore ami ekta website a dhuklam 
+        //thn login howar por autmoaticly 10/20mins porbe abar login koren
+        //like nsu rds 
+        //so token cokkies theke expire kore dei
+       
+       //cookie end
+       //cookie token get 
+       //cookie get kora lagbe cz jwt token cookie te ase
+       //tar jonno npm i cookie-parser
+       //var cookieParser = require('cookie-parser')
+
+       //cookie parser app.js a use korte hobe. and 
+       //extra ekta page khule ta get korte hobe
+     //var cookieParser = require('cookie-parser')
+      // app.use(cookieParser())
+
+
+
+
 
         //middleware end
         if(ismatch){

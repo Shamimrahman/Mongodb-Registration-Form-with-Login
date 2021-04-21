@@ -5,6 +5,7 @@ const app=express()
 const path=require('path')
 const port=process.env.PORT || 3000
 const hbs=require("hbs")
+const auth=require('./Middleware/auth')
 
 //package.json a giye thn scripts er under a 
 //"start":" node app.js"
@@ -69,7 +70,50 @@ app.get('/login',(req,res)=>{
   res.render('login')
 })
 
+//cookie parser to get token which is stored in cookie
+var cookieParser = require('cookie-parser')
+const jwt=require('jsonwebtoken')
 
+ app.use(cookieParser())
+ 
+ app.get('/validtoken', auth,(req,res)=>{
+  
+  //here auth is come fromm middle ware auth file to check user is authentic or not
+   console.log(`The valid token is ${req.cookies.jwt}`)
+  res.render('validtoken')
+})
+
+
+//logout
+app.get('/logout',auth,async(req,res)=>{
+
+  try{
+
+    res.clearCookie('jwt')
+    console.log("Log out")
+
+    //logout from just from  one device means current device
+    /*req.userinfo.tokens=req.userinfo.tokens.filter((currentelement)=>{
+      return currentelement.token !== req.token
+
+    })*/
+
+    //logout from all devices
+    req.userinfo.tokens=[];
+
+
+    //logout howar por por ai user data save hobe
+    await req.userinfo.save()
+    res.render('login')
+
+  }
+
+  catch(e){
+    res.status(401).send(e)
+
+  }
+
+})
 
 //connection
 
